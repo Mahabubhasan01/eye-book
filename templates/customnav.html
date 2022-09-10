@@ -1,0 +1,161 @@
+<style>
+  *,
+  *::after,
+  *::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+  body {
+    display: grid;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    background-color: #ecf0f1;
+  }
+  ul {
+    list-style: none;
+  }
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+    padding: 0px;
+    background-color: #fafbfb;
+  }
+  .navbar {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  .main-nav {
+    display: flex;
+    margin: auto;
+    gap: 10px;
+  }
+  .nav-item {
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+    z-index: 10;
+    white-space: nowrap;
+  }
+  .indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+    transform: scaleX(0);
+  }
+  .main-nav:hover ~ .indicator {
+    transform: scaleX(1);
+  }
+  .active {
+    position: relative;
+    --bc: #264653;
+  }
+  .active::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background-color: var(--bc);
+    animation: fade 300ms ease-in-out forwards;
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  /*  
+By Mostafa Alvandi
+https://codepen.io/alvandisetvat/pen/gOeQjPR
+*/
+</style>
+
+<header class="header">
+  <nav class="navbar">
+    <ul class="main-nav">
+      <li class="nav-item active">Home</li>
+      <li class="nav-item">Blog</li>
+      <li class="nav-item">Gallery</li>
+      <li class="nav-item">About Us</li>
+      <li class="nav-item">Contact Us</li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img
+            src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+            class="rounded-circle"
+            style="width: 30px"
+            alt="Avatar"
+          />
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+          </li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="indicator"></div>
+  </nav>
+</header>
+<script>
+  const items = document.querySelectorAll(".nav-item");
+  const ind = document.querySelector(".indicator");
+  const colorPallette = [
+    { background: "#264653", foreground: "#ffffff" },
+    { background: "#f4a261", foreground: "#000000" },
+    { background: "#2a9d8f", foreground: "#ffffff" },
+    { background: "#e9c46a", foreground: "#000000" },
+    { background: "#e76f51", foreground: "#ffffff" },
+  ];
+
+  function handleIndicator(el) {
+    ind.style.backgroundColor = el.dataset.bcolor;
+    el.style.color = el.dataset.fcolor;
+    ind.style.width = el.offsetWidth + "px";
+    ind.style.left = el.offsetLeft + "px";
+  }
+
+  items.forEach((item, index) => {
+    item.dataset.bcolor = colorPallette[index].background;
+    item.dataset.fcolor = colorPallette[index].foreground;
+    item.addEventListener("mousemove", (e) => {
+      handleIndicator(e.target);
+    });
+    item.addEventListener("click", (e) => {
+      items.forEach((item) => item.classList.remove("active"));
+      e.target.classList.add("active");
+      document
+        .querySelector(".active")
+        .style.setProperty("--bc", e.target.dataset.bcolor);
+    });
+    item.addEventListener("mouseleave", (e) => {
+      e.target.style.color = "#000000";
+    });
+  });
+
+  //By Mostafa Alvandi
+  //https://codepen.io/alvandisetvat/pen/gOeQjPR
+</script>
